@@ -18,14 +18,14 @@ bot.on('roomJoin', function(room) {
         bot.activatePlaylist(list);
         bot.joinBooth();
     } else {
-        if (bot.getDJ().username != "F!shtank"){
+        if (bot.getDJ().id != bot.getSelf().id){
             bot.leaveBooth();
         }
     }
 });
 
 bot.on('command:hello', function(data){
-    bot.sendChat("Hey, @" + data.from.username + "! I am F!shtank, a little decoration in this room! I also play music when noone else is playing. Ask me anything.");
+    bot.sendChat("Hey, @" + data.from.username + "! I am " + bot.getSelf().username + ", a little decoration in this room! I also play music when noone else is playing. Ask me anything.");
 });
 
 bot.on('advance', function(data){
@@ -37,7 +37,7 @@ bot.on('advance', function(data){
         bot.activatePlaylist(list);
         bot.joinBooth();
     } else {
-        if (bot.getDJ().username != "F!shtank"){
+        if (bot.getDJ().id != bot.getSelf().id){
             bot.leaveBooth();
         }
     }
