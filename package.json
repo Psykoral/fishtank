@@ -1,0 +1,27 @@
+{
+  "name": "fishtank",
+  "version": "1.0.0",
+  "description": "Fishtank bot for SWaQ Hanger.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "plug",
+    "dj",
+    "plugdj",
+    "plugapi",
+    "swaq",
+    "hanger",
+    "swaq-hanger",
+    "plugbot",
+    "bot",
+    "chat",
+    "chatbot"
+  ],
+  "author": "skiilaa",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "plugapi": "^4.2.3"
+  }
+}
