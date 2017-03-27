@@ -3,3 +3,6 @@ creds.js
 
 # Node modules
 node_modules/
+
+# User data
+usr.json
