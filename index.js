@@ -106,6 +106,7 @@ bot.on('roomJoin', function(room) {
 
 bot.on('userJoin', function(data){
     updateFile(JSON.stringify(newUser(data)));
+	bot.sendChat("Welcome @" + data.from.username + "!");
 });
 
 bot.on('command:help', function(data){
