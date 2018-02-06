@@ -1,6 +1,7 @@
 var PlugAPI = require('plugapi');
 var creds = require('./creds.js');
 var fs = require('fs');
+var logger = PlugAPI.CreateLogger('Bot');
 
 const coinPerPlay = 1;
 const list = 10137463;
@@ -16,7 +17,7 @@ function fileChecks(){
         fileUnparsed = fs.readFileSync("usr.json").toString();
         var fileContents = JSON.parse(fs.readFileSync("usr.json").toString());
     } catch(e) {
-        console.log("[fileCheckError] " + fileUnparsed + ":" + e);
+        logger.info("[fileCheckError] " + fileUnparsed + ":" + e);
         var fileContents = { "users": [] };
     }
     return fileContents;
@@ -24,11 +25,11 @@ function fileChecks(){
 
 function updateFile(contents){
     if (contents != null && typeof contents != "undefined" && typeof contents != "null" && contents != "null"){
-        console.log("[fileUpdate] " + contents);
+        logger.info("[fileUpdate] " + contents);
         fs.truncateSync("usr.json");
         fs.writeFileSync("usr.json", contents, {"encoding": "utf8"});
     } else {
-        console.log("[fileUpdate] contents is " + contents);
+        logger.info("[fileUpdate] contents is " + contents);
     }
 }
 
@@ -60,7 +61,7 @@ function addCoin(user, amount){
         fileContents.users[usrindex].coins += amount;
         return fileContents;
     } else {
-        console.log("[addCoin] user " + user + " doesn't exist");
+        logger.info("[addCoin] user " + user + " doesn't exist");
         return null;
     }
 }
@@ -74,21 +75,22 @@ function getCoin(user){
         }
     });
     if (coins != -1){
-        console.log("[getCoin] " + user + " has " + coins + " coins.");
+        logger.info("[getCoin] " + user + " has " + coins + " coins.");
         return coins;
     } else {
-        console.log("[getCoin] " + user + " is not found.");
+        logger.info("[getCoin] " + user + " is not found.");
         return 0;
     }
 }
 
 bot.on('roomJoin', function(room) {
-    console.log("Joined " + room + ".");
+    logger.info("Joined " + room + ".");
+	bot.sendChat("Successfully started PLUR Bot: "+bot.getSelf().username+". Type !help for a list of commands");
     var djs = 0;
     bot.getWaitList().forEach(function(){
         djs++;
     });
-    console.log(djs);
+    logger.info(djs);
     if (djs == 0 && bot.getDJ() == null){
         bot.activatePlaylist(list);
         bot.joinBooth();
@@ -106,12 +108,13 @@ bot.on('userJoin', function(data){
     updateFile(JSON.stringify(newUser(data)));
 });
 
-bot.on('command:hello', function(data){
-    bot.sendChat("Hey, @" + data.from.username + "! I am " + bot.getSelf().username + ", a little decoration in this room! I also play music when noone else is playing. Ask me anything.");
+bot.on('command:help', function(data){
+    bot.sendChat("Hey, @" + data.from.username + "! I am " + bot.getSelf().username + ", auto-moderator in this room! I keep a credits system for DJs, which is kind of like a DJ rank for this room specifically. You can see your credit balance by typing !credits.");
+	bot.sendChat("I will auto skip a song if it reaches 5 Mehs. I also play music when no one else is playing.");
 });
 
-bot.on('command:money', function(data){
-    bot.sendChat("@" + data.from.username + " You have " + getCoin(data.from.username) + " coins.");
+bot.on('command:credits', function(data){
+    bot.sendChat("@" + data.from.username + " You have " + getCoin(data.from.username) + " credits.");
 });
 
 bot.on('advance', function(data){
@@ -131,11 +134,12 @@ bot.on('advance', function(data){
         var dj = bot.getDJ();
         updateFile(JSON.stringify(addCoin(dj.username, coinPerPlay)));
     }
+	bot.woot();
 });
 
 bot.on('chat', function(data){
-    if (data.message.startsWith("@F!shtank")){
-        bot.sendChat("Hey @" + data.from.username + "! I am a robot. Learn more by typing \"!hello\"");
+    if (data.message.startsWith("@" + bot.getSelf().username)){
+        bot.sendChat("Hey @" + data.from.username + "! I am a robot. Learn more by typing \"!help\"");
     }
 });
 
@@ -146,4 +150,4 @@ bot.on('vote', function(data){
     }
 });
 
-bot.connect('swaq-hanger');
+bot.connect(creds.room);
