@@ -20,7 +20,7 @@
     "chat",
     "chatbot"
   ],
-  "author": "skiilaa",
+  "author": "Psykoral",
   "license": "GPL-3.0",
   "dependencies": {
     "plugapi": "^4.2.3"
