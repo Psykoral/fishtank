@@ -22,4 +22,8 @@ module.exports = {
 
 ## Running
 
-`npm start` // Or `npm start &` to run in the background
+`npm start` 
+
+Or to run in the background you can use:
+
+`./start.sh`
