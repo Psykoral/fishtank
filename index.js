@@ -129,16 +129,16 @@ bot.on('advance', function(data){
         if (bot.getDJ().id != bot.getSelf().id){
             bot.leaveBooth();
         }
+	    bot.woot();
     }
     if (bot.getDJ() != null){
         var dj = bot.getDJ();
         updateFile(JSON.stringify(addCoin(dj.username, coinPerPlay)));
     }
-	bot.woot();
 });
 
 bot.on('chat', function(data){
-    if (data.message.startsWith("@" + bot.getSelf().username)){
+    if (data.message.indexOf("@" + bot.getSelf().username) > -1){
         bot.sendChat("Hey @" + data.from.username + "! I am a robot. Learn more by typing \"!help\"");
     }
 });
