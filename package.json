@@ -23,6 +23,7 @@
   "author": "Psykoral",
   "license": "GPL-3.0",
   "dependencies": {
-    "plugapi": "^4.2.3"
+    "jethro": "^4.4.0",
+    "plugapi": "^5.0.0"
   }
 }
