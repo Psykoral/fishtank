@@ -144,15 +144,28 @@ bot.on('command:credits', function (data) {
 // });
 
 bot.on('advance', function (data) {
-	var djs = 0;
-	bot.getWaitList().forEach(function () {
-		djs++;
-	});
-	if (djs == 0 && bot.getDJ() == null) {
+	var djs = 0,
+		list = function () {
+			return bot.getWaitList();
+		};
+
+	logger('success', 'bot.on(advance)', 'Song Change');
+
+	if (typeof bot.getWaitList === 'function' && list.length >= 0) {
+		bot.getWaitList().forEach(function () {
+			djs++;
+		});
+	}
+
+	logger('info', 'Number of DJs: ', djs.toString() + ', bot.getDJ(): ' + bot.getDJ());
+
+	if (djs === 0 && bot.getDJ() == null) {
+		logger('warning', 'bot.on(advance)', 'No Djs, bot grabbing the decks');
 		bot.activatePlaylist(creds.playlist);
 		bot.joinBooth();
 	} else {
-		if (bot.getDJ().id != bot.getSelf().id) {
+		if (bot.getDJ().id !== bot.getSelf().id) {
+			logger('warning', 'bot.on(advance)', 'bot.leaveBooth');
 			bot.leaveBooth();
 		}
 		bot.woot();
